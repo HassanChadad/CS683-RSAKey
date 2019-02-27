@@ -1,4 +1,4 @@
-import random, sys, os, primeNumberGenerator
+import random, sys, os
 
 """
 This is Rabin miller algorithm
@@ -50,9 +50,9 @@ def isPrime(num):
 """
 This function generates large prime number
 """
-def generateLargePrime():
+def generateLargePrime(keySize):
     while True:
-        num = random.randrange(2 ** (1024 - 1), 2 ** (1024))
+        num = random.randrange(2 ** (keySize - 1), 2 ** (keySize))
         if isPrime(num):
             return num
 
@@ -84,14 +84,14 @@ def findModInverse(a, m):
     return u1 % m
 
 """
-A function that creates the public and the private key.
+A function that accepts a keySize and creates the public and the private keys
 """
 def generateKeys(keySize):
     # Step 1: Create two prime numbers, p and q. Calculate n = p * q.
     print("Generating p prime...")
-    p = primeNumberGenerator.generateLargePrime(keySize)
+    p = generateLargePrime(keySize)
     print("Generating q prime...")
-    q = primeNumberGenerator.generateLargePrime(keySize)
+    q = generateLargePrime(keySize)
     n = p * q
 
     # Step 2: Create a number e that is relatively prime to (p-1)*(q-1).
@@ -106,9 +106,12 @@ def generateKeys(keySize):
     d = findModInverse(e, (p - 1) * (q - 1))
     publicKey = (n, e)
     privateKey = (n, d)
-    print("Public key:", publicKey)
-    print("Private key:", privateKey)
+    print("Public key:", publicKey[0])
+    print("\nPrivate key:", privateKey[0])
 
-# the main() function.
+
+"""
+The main() function that calls generateKeys function
+"""
 if __name__ == "__main__":
-    generateKeys(1024)
+    generateKeys(2048)
